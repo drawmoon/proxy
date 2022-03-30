@@ -14,7 +14,7 @@
   - [启用 CORS 跨域](#启用-cors-跨域)
   - [处理 OPTIONS 方法的请求](#处理-options-方法的请求)
   - [限制使用 “安全” 的 HTTP 请求](#限制使用-安全-的-http-请求)
-  - [Socket](#socket)
+  - [WebSocket](#websocket)
 - [Docker](#docker)
 - [Docker-Compose](#docker-compose)
 - [Kubernetes](#kubernetes)
@@ -216,7 +216,7 @@ location / {
 }
 ```
 
-### Socket
+### WebSocket
 
 ```conf
 location / {
