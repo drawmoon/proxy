@@ -16,6 +16,7 @@
   - [添加响应头](#添加响应头)
   - [重写响应头](#重写响应头)
   - [移除响应头](#移除响应头)
+- [日志](#日志)
 - [扩展](#扩展)
   - [启用 CORS 跨域](#启用-cors-跨域)
   - [处理 OPTIONS 方法的请求](#处理-options-方法的请求)
@@ -116,7 +117,7 @@ backend report
 
 ### 重写请求路径
 
-使用 `set-path` 重写请求的 URL 路径。
+使用 `set-path` 配置指令重写请求的 URL 路径。
 
 ```conf
 # 将 /report-rest 更改为 /rest 示例
@@ -135,7 +136,7 @@ backend serve
 
 ### 重写请求方法
 
-使用 `set-method` 重写请求的方法。
+使用 `set-method` 配置指令重写请求的方法。
 
 ```conf
 # 将 PUT 方法的请求更改为 POST 方法
@@ -153,7 +154,7 @@ backend serve
 
 ### 添加请求头
 
-使用 `add-header` 添加请求头。
+使用 `add-header` 配置指令添加请求头。
 
 ```conf
 # 判断请求头中是否存在 X-Forwarded-For
@@ -174,7 +175,7 @@ backend serve
 
 ### 重写请求头
 
-使用 `set-header` 重写请求头。
+使用 `set-header` 配置指令重写请求头。
 
 ```conf
 frontend wwww
@@ -190,7 +191,7 @@ backend serve
 
 ### 移除请求头
 
-使用 `del-header` 移除请求头。
+使用 `del-header` 配置指令移除请求头。
 
 ```conf
 frontend wwww
@@ -208,6 +209,8 @@ backend serve
 
 ### 添加响应头
 
+使用 `add-header` 配置指令添加响应头。
+
 ```conf
 frontend wwww
    bind :8000
@@ -221,6 +224,8 @@ backend serve
 ```
 
 ### 重写响应头
+
+使用 `set-header` 配置指令重写响应头。
 
 ```conf
 frontend wwww
@@ -236,6 +241,8 @@ backend serve
 
 ### 移除响应头
 
+使用 `del-header` 配置指令移除响应头。
+
 ```conf
 frontend wwww
    bind :8000
@@ -246,6 +253,22 @@ frontend wwww
 
 backend serve
    server s1 localhost:5000
+```
+
+## 日志
+
+```conf
+# 将所有级别的日志记录到远程日志服务器
+# 并指定日志模式为 http
+
+global
+   log localhost local0
+
+defaults
+   mode http
+
+   log global
+   option httplog
 ```
 
 ## 扩展
@@ -309,7 +332,7 @@ COPY haproxy.cfg /usr/local/etc/haproxy/haproxy.cfg
 version: "3"
 services:
 
-  httpproxy:
+  proxy:
     image: haproxy:latest
     volumes:
       - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
