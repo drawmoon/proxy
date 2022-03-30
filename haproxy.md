@@ -18,7 +18,6 @@
   - [移除响应头](#移除响应头)
 - [日志](#日志)
 - [负载均衡](#负载均衡)
-  - [负载均衡算法](#负载均衡算法)
 - [扩展](#扩展)
   - [启用 CORS 跨域](#启用-cors-跨域)
   - [处理 OPTIONS 方法的请求](#处理-options-方法的请求)
@@ -119,9 +118,9 @@ backend report
 
 可以写在以下块中：
 
-| default | listen | frontend | backend |
-| --- | --- | --- | --- |
-| <img src="https://render.githubusercontent.com/render/math?math=${\color{red} \times}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> |
+| global | defaults | listen | frontend | backend |
+| --- | --- | --- | --- | --- |
+| <img src="https://render.githubusercontent.com/render/math?math=${\color{red} \times}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{red} \times}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> |
 
 ### 重写请求路径
 
@@ -219,9 +218,9 @@ backend serve
 
 可以写在以下块中：
 
-| default | listen | frontend | backend |
-| --- | --- | --- | --- |
-| <img src="https://render.githubusercontent.com/render/math?math=${\color{red} \times}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> |
+| global | defaults | listen | frontend | backend |
+| --- | --- | --- | --- | --- |
+| <img src="https://render.githubusercontent.com/render/math?math=${\color{red} \times}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{red} \times}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> |
 
 ### 添加响应头
 
@@ -289,7 +288,13 @@ defaults
 
 ## 负载均衡
 
-### 负载均衡算法
+使用 `balance` 配置指令指定负载算法。
+
+可以写在以下块中：
+
+| global | defaults | listen | frontend | backend |
+| --- | --- | --- | --- | --- |
+| <img src="https://render.githubusercontent.com/render/math?math=${\color{red} \times}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{red} \times}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> |
 
 - `random`: 随机算法
 - `rdp-cookie`: 基于 Cookie 的会话粘滞
@@ -302,7 +307,11 @@ defaults
    timeout server 60s
    timeout connect 1s
 
-   balance random
+   balance hdr(X-Real-IP)
+
+backend serve
+   server s1 localhost:5000
+   server s2 localhost:5001
 ```
 
 - [参考](https://cbonte.github.io/haproxy-dconv/2.2/configuration.html#4-balance)
