@@ -115,7 +115,13 @@ backend report
 
 ## 重写 HTTP 请求
 
-使用 `http-request` 配置指令重写 HTTP 请求，可以写在 `listen`, `frontend` 或 `backend` 块中。
+使用 `http-request` 配置指令重写 HTTP 请求。
+
+可以写在以下块中：
+
+| default | listen | frontend | backend |
+| --- | --- | --- | --- |
+| <img src="https://render.githubusercontent.com/render/math?math=${\color{red} \times}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> |
 
 ### 重写请求路径
 
@@ -208,6 +214,14 @@ backend serve
 ```
 
 ## 重写 HTTP 响应
+
+使用 `http-response` 配置指令重写 HTTP 响应。
+
+可以写在以下块中：
+
+| default | listen | frontend | backend |
+| --- | --- | --- | --- |
+| <img src="https://render.githubusercontent.com/render/math?math=${\color{red} \times}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> | <img src="https://render.githubusercontent.com/render/math?math=${\color{green} \checkmark}$"> |
 
 ### 添加响应头
 
