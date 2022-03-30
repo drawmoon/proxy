@@ -17,6 +17,8 @@
   - [重写响应头](#重写响应头)
   - [移除响应头](#移除响应头)
 - [日志](#日志)
+- [负载均衡](#负载均衡)
+  - [负载均衡算法](#负载均衡算法)
 - [扩展](#扩展)
   - [启用 CORS 跨域](#启用-cors-跨域)
   - [处理 OPTIONS 方法的请求](#处理-options-方法的请求)
@@ -270,6 +272,26 @@ defaults
    log global
    option httplog
 ```
+
+## 负载均衡
+
+### 负载均衡算法
+
+- `random`: 随机算法
+- `rdp-cookie`: 基于 Cookie 的会话粘滞
+- `hdr(<name>)`: 基于指定请求头的会话粘滞
+
+```conf
+defaults
+   mode http
+   timeout client 60s
+   timeout server 60s
+   timeout connect 1s
+
+   balance random
+```
+
+- [参考](https://cbonte.github.io/haproxy-dconv/2.2/configuration.html#4-balance)
 
 ## 扩展
 
