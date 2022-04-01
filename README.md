@@ -4,7 +4,4 @@
 
 - [HAProxy](haproxy.md)
 - [Nginx](nginx.md)
-
-## 代理工具
-
 - [Whistle](whistle.md)
