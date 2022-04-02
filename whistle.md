@@ -17,18 +17,31 @@
 myweb.test localhost:5000
 ```
 
+### 通配符匹配
+
+```conf
+# 必须以 ^ 开头，以 $ 结束，$ 符号可以省略
+# * 为通配符，可以通过 $1-9 的格式获取通配符匹配的字符
+
+# Rules
+
+^myweb.test/*** localhost:5000/$1
+```
+
 ## 重写 HTTP 请求
 
 ### 重写请求路径
 
 ```conf
+# 可使用通配符匹配规则实现代理到其他 URL 路径
+
+# 将 api/file/{id}/picture 开始的 HTTP 请求转发到 api/file/{id}/chart
+# http://myweb.test/api/file/718/picture/window/100?filename=expamle.png -> http://myweb.test/api/file/718/chart/window/100?filename=expamle.png
+
 # Rules
 
 myweb.test localhost:5000
 
-# 将 api/file/{id}/picture 开始的 HTTP 请求转发到 api/file/{id}/chart
-# http://myweb.test/api/file/718/picture/window/100?filename=expamle.png -> http://myweb.test/api/file/718/chart/window/100?filename=expamle.png
-# 其中 ^ 表示以 ... 开头，$1 = 718，$2 = window/100?filename=expamle.png
 ^myweb.test/api/file/*/picture/*** localhost:5000/api/file/$1/chart/$2
 ```
 
