@@ -236,8 +236,14 @@ location / {
 ```bash
 docker pull nginx
 
-docker run -v ./nginx.conf:/etc/nginx/nginx.conf:ro -p 80:80
+docker run \
+  -v ./nginx.conf:/etc/nginx/nginx.conf:ro \
+  -v ./web/content:/usr/share/nginx/html:ro \
+  -p 80:80 \
+  nginx
 ```
+
+`-v ./nginx.conf:/etc/nginx/nginx.conf:ro` 挂载 Nginx 配置文件，`-v ./web/content:/usr/share/nginx/html:ro` 挂载网页静态文件
 
 ## Docker-Compose
 
@@ -248,7 +254,8 @@ services:
   proxy:
     image: nginx:latest
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./web/content:/usr/share/nginx/html:ro
     ports:
       - "80:80"
     restart: always
