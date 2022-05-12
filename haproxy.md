@@ -21,6 +21,7 @@
 - [扩展](#扩展)
   - [启用 CORS 跨域](#启用-cors-跨域)
   - [处理 OPTIONS 方法的请求](#处理-options-方法的请求)
+  - [根据 URL 参数添加请求头](#根据-url-参数添加请求头)
 - [Docker](#docker)
   - [Dockerfile](#dockerfile)
 - [Docker-Compose](#docker-compose)
@@ -338,6 +339,8 @@ backend serve
 
 ### 处理 OPTIONS 方法的请求
 
+内置变量 `METH_OPTIONS` 可以判断请求方法是否为 `OPTIONS`。
+
 ```conf
 frontend www
    bind :8000
@@ -349,6 +352,28 @@ frontend www
    http-response set-header Access-Control-Allow-Headers "*" if METH_OPTIONS
    http-response set-header Access-Control-Max-Age "1728000" if METH_OPTIONS
    http-response set-status 204 if METH_OPTIONS
+
+   default_backend serve
+
+backend serve
+   server s1 localhost:5000
+```
+
+### 根据 URL 参数添加请求头
+
+使用 `urlp(<name>)` 配置指令截取指定名称的 URL 参数。
+
+```conf
+# 当接收到请求 http://localhost:8000?sessionid=SESSIONID_VALUE
+# 判断 URL 是否存在 sessionid 参数
+# 如果存在则将 sessionid 添加到请求头
+
+frontend www
+   bind :8000
+
+   acl has_url_ssid urlp(sessionid) -m found
+
+   http-request add-header X-SessionId %[urlp(sessionid)] if has_url_ssid
 
    default_backend serve
 
