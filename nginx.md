@@ -221,10 +221,10 @@ location / {
 ```conf
 location / {
     set $proxy_connection close;
-    if ($http_connection ~ "Upgrade") { 
+    if ($http_connection ~ "Upgrade") {
         set $proxy_connection $http_connection;
     }
-    proxy_set_header Connection $proxy_connection; 
+    proxy_set_header Connection $proxy_connection;
     proxy_set_header Upgrade $http_upgrade;
 
     proxy_pass http://localhost:5000;
@@ -233,9 +233,15 @@ location / {
 
 ## Docker
 
+拉取 Nginx 镜像：
+
 ```bash
 docker pull nginx
+```
 
+运行 Nginx 容器：
+
+```bash
 docker run \
   -v ./nginx.conf:/etc/nginx/nginx.conf:ro \
   -v ./web/content:/usr/share/nginx/html:ro \
@@ -243,9 +249,13 @@ docker run \
   nginx
 ```
 
-`-v ./nginx.conf:/etc/nginx/nginx.conf:ro` 挂载 Nginx 配置文件，`-v ./web/content:/usr/share/nginx/html:ro` 挂载网页静态文件
+- `-v ./nginx.conf:/etc/nginx/nginx.conf:ro` 是将 `./nginx.conf` 文件挂载到容器的 `/etc/nginx/nginx.conf` 路径下，并设置为只读模式
+- `-v ./web/content:/usr/share/nginx/html:ro` 是将 `./web/content` 文件夹挂载到容器的 `/usr/share/nginx/html` 路径下，并设置为只读模式
+- `-p 80:80` 是将容器的 80 端口映射到主机的 80 端口
 
 ## Docker-Compose
+
+编辑 `docker-compose.yml` 文件，配置 Nginx 服务：
 
 ```yaml
 version: "3"
@@ -261,11 +271,21 @@ services:
     restart: always
 ```
 
+- `./nginx.conf:/etc/nginx/nginx.conf:ro` 是将 `./nginx.conf` 文件挂载到容器的 `/etc/nginx/nginx.conf` 路径下，并设置为只读模式
+- `./web/content:/usr/share/nginx/html:ro` 是将 `./web/content` 目录挂载到容器的 `/usr/share/nginx/html` 路径下，并设置为只读模式
+- `80:80` 是将容器的 80 端口映射到主机的 80 端口
+
+运行 Nginx 服务：
+
+```bash
+docker-compose up -d
+```
+
 ## Kubernetes
 
 ### 代理 Pod
 
-运行 `kubectl get pod --all-namespaces` 将 `Pod` 查询出来：
+运行 `kubectl get pod --all-namespaces` 将 Pod 查询出来：
 
 ```bash
 kubectl get pod --all-namespaces
@@ -291,7 +311,7 @@ kubernetes-dashboard      kubernetes-dashboard-78c79f97b4-zg9cq                 
 report                    report-helm-chart-6f475cbfcc-7nzkk                         1/1     Running            0          8h
 ```
 
-接下来配置 `Nginx` 的代理，代理的地址填写 `Pod` 的 `DNS` 条目：
+接下来配置 Nginx 的代理，代理的地址填写 Pod 的 DNS 条目：
 
 ```bash
 location /api {
